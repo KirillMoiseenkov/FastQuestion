@@ -20,8 +20,6 @@ public class Handler {
 
         Server server = new Server();
         server.run();
-
-
     }
 
 }

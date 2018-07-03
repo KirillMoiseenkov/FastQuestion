@@ -9,10 +9,14 @@ import CreationShip.demo.NIO.worcker.Stages.IConnector;
 import CreationShip.demo.models.Question;
 import CreationShip.demo.service.MessageService;
 import CreationShip.demo.service.QuestionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 
 public class Connection implements IConnection{
+
+    private static final Logger logger = LoggerFactory.getLogger(Connection.class);
 
     private int stage = 1;
     private IConnector iConnector;
@@ -63,8 +67,7 @@ public class Connection implements IConnection{
     public void upStage() {
         stage++;
         iConnector = stages.get(stage);
-
-        System.out.println("up stage");
+        logger.info("up stage");
 
     }
 
@@ -72,8 +75,7 @@ public class Connection implements IConnection{
     public void downStage() {
         stage--;
         iConnector = stages.get(stage);
-
-        System.out.println("down stage");
+        logger.info("down stage");
     }
 
     @Override
@@ -85,17 +87,12 @@ public class Connection implements IConnection{
             upStage();
             iConnector.setQuestion(question);
         }
-
         iConnector.write();
-
     }
 
     @Override
     public String read() {
-
         return iConnector.read();
-
-
     }
 
 
