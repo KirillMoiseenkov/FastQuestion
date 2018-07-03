@@ -72,13 +72,13 @@ public class Client {
 
         BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 
-        for (int i = 0; i<5;i++){
-
+        for (int i = 0; i<4;i++){
             echoClient.sendGetMessage(stdIn);
-
         }
 
         client.write(ByteBuffer.wrap("".getBytes()));
+        client.write(ByteBuffer.wrap("".getBytes()));
+
 
         while (true){
             echoClient.getMessages();
