@@ -15,5 +15,8 @@ public interface IConnector {
     public void setWriter(Writer writer);
     public void setReader(Reader reader);
 
+    public Reader getReader();
+    public Writer getWriter();
+
     public void setQuestion(Question question);
 }

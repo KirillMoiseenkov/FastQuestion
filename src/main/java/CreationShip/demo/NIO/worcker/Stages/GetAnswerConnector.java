@@ -19,7 +19,7 @@ public class GetAnswerConnector implements IConnector {
     private Long messageId;
     private Long oldId;
     private List<Message> messageList;
-    private int counter = 0;
+    private int counter = 1;
 
     public GetAnswerConnector(MessageService messageService, QuestionService questionService){
         this.messageService = messageService;
@@ -40,10 +40,19 @@ public class GetAnswerConnector implements IConnector {
     }
 
     @Override
+    public Reader getReader() {
+        return reader;
+    }
+
+    @Override
+    public Writer getWriter() {
+        return writer;
+    }
+
+    @Override
     public String read() {
 
-        reader.enableWriteMode(true);
-        writer.write("pos");
+        reader.enableWriteMode(false);
         return "Empty";
 
     }
@@ -51,43 +60,29 @@ public class GetAnswerConnector implements IConnector {
     @Override
     public void write() {
 
-        writer.write("koo-koo");
         writer.enableReadMode(false);
-       /* messageList = messageService.getByQuestion(messageId);
 
-        if (messageList.size() == 0){
+
+
+        if (counter == 1){
+
+            messageList = messageService.getByQuestion(messageId);
+
+            if (messageList.size() == 0)
             return;
+
+            messageList.forEach(message -> writer.write(message.getMessage()));
+            oldId = messageList.get(messageList.size() - 1).getId();
+
+            counter++;
         }
 
-        writer.write(messageList.get(messageList.size()-1).getMessage());
-        System.out.println(messageList.get(messageList.size()-1).getMessage());
-        writer.enableReadMode(false);
-
-
-        System.out.println("messageList.size() = "   + messageList.size());
-        messageList.forEach(message ->
-        {
-            writer.write(message.getMessage());
-            System.out.println(message.getMessage());
-        });
-
-        System.out.println("messageList.size() after = "   + messageList.size());*/
-
-
-
-
-            /*oldId = messageList.get(messageList.size() - 1).getId();
             messageList = messageService.getByQuestion(messageId, oldId);
 
-
             if (messageList.size() > 0) {
-                messageList.forEach(message ->
-                {
-                    writer.write(message.getMessage());
-                    System.out.println(message.getMessage());
-                });
+                messageList.forEach(message -> writer.write(message.getMessage()));
                 oldId = messageList.get(messageList.size() - 1).getId();
-            }*/
+            }
     }
 
     @Override

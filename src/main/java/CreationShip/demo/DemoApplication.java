@@ -11,9 +11,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner{
 
-	//@Autowired
-	//Acceptor acceptor;
-
 	@Autowired
 	Handler handler;
 
@@ -27,9 +24,5 @@ public class DemoApplication implements CommandLineRunner{
 	public void run(String... args) throws Exception {
 
 		handler.startServer();
-		//Acceptor.PORT = 8080;
-
-		//acceptor.run();
-
 	}
 }

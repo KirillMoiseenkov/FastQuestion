@@ -13,7 +13,7 @@ public class AskQuestionConnector implements IConnector {
     private MessageService messageService;
     private QuestionService questionService;
     private Question question;
-    private int counter = 0;
+    private int counter = 1;
 
     public AskQuestionConnector(MessageService messageService, QuestionService questionService){
         this.messageService = messageService;
@@ -30,10 +30,20 @@ public class AskQuestionConnector implements IConnector {
         }
     }
 
+    @Override
+    public Reader getReader() {
+        return reader;
+    }
+
+    @Override
+    public Writer getWriter() {
+        return writer;
+    }
+
     public void setReader(Reader reader) {
         this.reader = reader;
 
-        counter++;
+
     }
 
     public void setWriter(Writer writer) {
@@ -53,7 +63,7 @@ public class AskQuestionConnector implements IConnector {
 
     @Override
     public void write() {
-
+        counter++;
         System.out.println("ask question");
         writer.write("Ask question, please");
 

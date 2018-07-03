@@ -1,11 +1,13 @@
 package CreationShip.demo.NIO;
 
+import CreationShip.demo.DemoApplication;
 import CreationShip.demo.NIO.comunic.Reader;
 import CreationShip.demo.NIO.comunic.Writer;
-import CreationShip.demo.NIO.worcker.Stages.AskQuestionConnector;
 import CreationShip.demo.NIO.worcker.Connection;
 import CreationShip.demo.service.MessageService;
 import CreationShip.demo.service.QuestionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,7 @@ public class Server extends Thread {
 
     private static ThreadLocal<Integer> countConnection = new ThreadLocal<>();
     private static InetSocketAddress inetSocketAddress = new InetSocketAddress("localhost", 8080);
+    private static final Logger logger = LoggerFactory.getLogger(Server.class);
 
     @Autowired
     private MessageService messageService;
@@ -33,6 +36,8 @@ public class Server extends Thread {
 
     private ServerSocketChannel serverSocket = ServerSocketChannel.open();
     private int allocate;
+    private Map<SelectionKey, Connection> connectionMap = new HashMap<>();
+
 
     public Server(int allocate, InetSocketAddress inetSocketAddress) throws IOException {
 
@@ -50,8 +55,6 @@ public class Server extends Thread {
 
         serverSocket.bind(inetSocketAddress);
         serverSocket.configureBlocking(false);
-
-
     }
 
     public static Integer getCountConnection() {
@@ -68,10 +71,7 @@ public class Server extends Thread {
         Selector selector;
         ByteBuffer buffer;
         countConnection.set(0);
-        Map<SelectionKey, String> lastMessage = new HashMap<>();
-        Map<SelectionKey, AskQuestionConnector> connectorMap = new HashMap<>();
 
-        Map<SelectionKey,Connection> connectionMap = new HashMap<>();
 
         try {
             selector = Selector.open();
@@ -86,62 +86,43 @@ public class Server extends Thread {
 
             while (true) {
 
-
                 selector.select();
                 Set<SelectionKey> selectedKeys = selector.selectedKeys();
                 Iterator<SelectionKey> iter = selectedKeys.iterator();
 
                 while (iter.hasNext()) {
 
-                    Reader reader = null;
-                    Writer writer = null;
-
                     SelectionKey key = iter.next();
-
 
                     if (key.isAcceptable()) {
 
                         countConnection.set(countConnection.get() + 1);
                         System.out.println("connectioSize = " + countConnection.get() + " thread is" + Thread.currentThread());
                         register(selector, serverSocket);
-                        System.out.println("new Connector");
-                        }
+
+                        logger.info("new Connector");
+
+                    }
 
                     if (key.isValid() && key.isReadable()) {
 
-                        reader = new Reader(buffer, key, selector);
-                        reader.enableWriteMode(true);
+                        read(buffer, key, selector);
 
-                        if (!connectionMap.containsKey(key)) {
-                            connectionMap.put(key, new Connection(messageService,questionService));
-                        }
-
-                        Connection connection = connectionMap.get(key);
-                        connection.setReader(reader);
-                        connection.read();
-                        }
+                    }
 
                     if (key.isValid() && key.isWritable()) {
 
-                        if (!connectionMap.containsKey(key)) {
-                            connectionMap.put(key, new Connection(messageService,questionService));
-                            }
+                        write(buffer, key, selector);
 
-                        writer = new Writer(buffer, key, selector);
-                        writer.enableReadMode(true);
+                    }
 
-                        Connection connection = connectionMap.get(key);
-                        connection.setWrite(writer);
-                        connection.write();
-
-                     }
                     iter.remove();
                 }
             }
         } catch (IOException e) {
             System.out.println(e);
         }
-        System.out.println("end = " + Thread.currentThread());
+
     }
 
     private void register(Selector selector, ServerSocketChannel serverSocket) throws IOException {
@@ -151,6 +132,53 @@ public class Server extends Thread {
         client.register(selector, SelectionKey.OP_WRITE);
 
     }
+
+    private void read(ByteBuffer buffer, SelectionKey key, Selector selector) {
+
+        Connection connection;
+
+        if (!connectionMap.containsKey(key)) {
+
+            connectionMap.put(key, new Connection(messageService, questionService));
+            connection = connectionMap.get(key);
+        }
+
+        connection = connectionMap.get(key);
+
+        if (connection.getReader() == null) {
+            Reader reader = null;
+            reader = new Reader(buffer, key, selector);
+            reader.enableWriteMode(true);
+            connection.setReader(reader);
+        }
+
+        connection.read();
+
+    }
+
+    private void write(ByteBuffer buffer, SelectionKey key, Selector selector) {
+
+        Connection connection;
+
+        if (!connectionMap.containsKey(key)) {
+            connectionMap.put(key, new Connection(messageService, questionService));
+
+            connection = connectionMap.get(key);
+        }
+
+        connection = connectionMap.get(key);
+
+        if (connection.getWriter() == null) {
+            Writer writer = null;
+            writer = new Writer(buffer, key, selector);
+            writer.enableReadMode(true);
+            connection.setWriter(writer);
+        }
+
+        connection.write();
+
+    }
+
 
 
 }

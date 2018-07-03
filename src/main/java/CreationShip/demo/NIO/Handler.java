@@ -19,15 +19,6 @@ public class Handler {
     public static void main(String[] args) throws IOException {
 
         Server server = new Server();
-                //new EchoServer(64, null);
-
-
-        /*Thread thread = echoServer;
-
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
-
-        executorService.submit(thread);*/
-
         server.run();
 
 

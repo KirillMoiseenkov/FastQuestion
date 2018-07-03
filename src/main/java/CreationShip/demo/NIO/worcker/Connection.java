@@ -35,6 +35,13 @@ public class Connection implements IConnection{
         iConnector = stages.get(1);
     }
 
+    public Reader getReader(){
+        return answerQuestionConnector.getReader();
+    }
+
+    public Writer getWriter(){
+        return answerQuestionConnector.getWriter();
+    }
 
     public void setReader(Reader reader){
         answerQuestionConnector.setReader(reader);
@@ -42,7 +49,7 @@ public class Connection implements IConnection{
         getAnswerConnector.setReader(reader);
     }
 
-    public void setWrite(Writer write){
+    public void setWriter(Writer write){
         answerQuestionConnector.setWriter(write);
         askQuestionConnector.setWriter(write);
         getAnswerConnector.setWriter(write);

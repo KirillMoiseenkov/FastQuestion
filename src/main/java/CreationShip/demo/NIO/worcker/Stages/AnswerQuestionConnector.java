@@ -13,8 +13,8 @@ public class AnswerQuestionConnector implements IConnector {
     private Writer writer;
     private MessageService messageService;
     private QuestionService questionService;
-    private Question question;// = new Question();
-    private int counter = 0;
+    private Question question;
+    private int counter = 1;
 
     public AnswerQuestionConnector(MessageService messageService, QuestionService questionService){
         this.messageService = messageService;
@@ -22,7 +22,15 @@ public class AnswerQuestionConnector implements IConnector {
 
     }
 
+    @Override
+    public Reader getReader() {
+        return reader;
+    }
 
+    @Override
+    public Writer getWriter() {
+        return writer;
+    }
 
     @Override
     public boolean getStateStage() {
@@ -40,28 +48,28 @@ public class AnswerQuestionConnector implements IConnector {
 
     public void setWriter(Writer writer) {
 
-        counter++;
+
         this.writer = writer;
     }
 
     @Override
     public String read() {
 
-        String responce = reader.read();
+        String response = reader.read();
 
         System.out.println(question.toString());
 
-        Message message = new Message(question,responce);
+        Message message = new Message(question,response);
         messageService.saveOrUpdate(message);
 
 
-        return responce;
+        return response;
     }
 
     @Override
     public void write() {
 
-
+        counter++;
 
         question = questionService.getRandomQuestion(1).get(0);
         while (question.getQuestion().length() < 4) {
@@ -73,13 +81,6 @@ public class AnswerQuestionConnector implements IConnector {
 
         System.out.println( "question is " + question.getQuestion());
 
-    }
-
-    public void write(String msg) {
-
-        //Question question = questionService.getRandomQuestion(1).get(0);
-        //writer.write(question.getQuestion());
-        writer.write(msg);
     }
 
     @Override
