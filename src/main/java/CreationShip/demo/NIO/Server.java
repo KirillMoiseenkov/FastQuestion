@@ -72,7 +72,6 @@ public class Server extends Thread {
         ByteBuffer buffer;
         countConnection.set(0);
 
-
         try {
             selector = Selector.open();
             serverSocket.register(selector, SelectionKey.OP_ACCEPT);
@@ -95,27 +94,18 @@ public class Server extends Thread {
                     SelectionKey key = iter.next();
 
                     if (key.isAcceptable()) {
-
                         countConnection.set(countConnection.get() + 1);
-                        System.out.println("connectioSize = " + countConnection.get() + " thread is" + Thread.currentThread());
                         register(selector, serverSocket);
-
                         logger.info("new Connector");
-
                     }
 
                     if (key.isValid() && key.isReadable()) {
-
                         read(buffer, key, selector);
-
                     }
 
                     if (key.isValid() && key.isWritable()) {
-
                         write(buffer, key, selector);
-
                     }
-
                     iter.remove();
                 }
             }

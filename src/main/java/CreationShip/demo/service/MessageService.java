@@ -11,12 +11,13 @@ import java.util.List;
 @Service
 public class MessageService implements ISerivce<Message>{
 
+
+    private final MessageDaoImpl messageDao;
+
     @Autowired
-    MessageDaoImpl messageDao;
-
-
-
-    public MessageService(){}
+    public MessageService(MessageDaoImpl messageDao) {
+        this.messageDao = messageDao;
+    }
 
 
 

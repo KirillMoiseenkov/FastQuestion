@@ -11,11 +11,12 @@ import java.util.List;
 @Service
 public class QuestionService implements ISerivce<Question> {
 
+
+    private final QuestionDaoImpl questionDao;
+
     @Autowired
-    QuestionDaoImpl questionDao;
-
-
-    public QuestionService() {
+    public QuestionService(QuestionDaoImpl questionDao) {
+        this.questionDao = questionDao;
     }
 
     @Override

@@ -30,9 +30,9 @@ public class Client {
 
         client.read(buffer);
 
-        String responce = new String(Arrays.copyOfRange(buffer.array(),0, buffer.position()));
+        String response = new String(Arrays.copyOfRange(buffer.array(), 0, buffer.position()));
 
-        System.out.println("responce from send: " + responce.replace(System.lineSeparator(),""));
+        System.out.println("response from send: " + response.replace(System.lineSeparator(), ""));
 
         buffer.flip();
         buffer.clear();
@@ -47,7 +47,7 @@ public class Client {
 
         String responce = new String(Arrays.copyOfRange(buffer.array(),0, buffer.position()));
 
-        System.out.println("responce from get: " + responce.replace(System.lineSeparator(),""));
+        System.out.println("response from get: " + responce.replace(System.lineSeparator(), ""));
 
         buffer.flip();
         buffer.clear();

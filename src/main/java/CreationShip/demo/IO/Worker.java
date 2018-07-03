@@ -2,7 +2,6 @@ package CreationShip.demo.IO;
 //Prepare to working
 
 
-import CreationShip.demo.dao.MessageDaoImpl;
 import CreationShip.demo.models.Message;
 import CreationShip.demo.models.Question;
 import CreationShip.demo.service.MessageService;
@@ -32,8 +31,8 @@ public class Worker implements Runnable {
 
     public Worker(Socket socket) {
 
-        messageService = new MessageService();
-        questionService = new QuestionService();
+        // messageService = new MessageService(messageDao);
+        // questionService = new QuestionService(questionDao);
         this.socket = socket;
 
     }

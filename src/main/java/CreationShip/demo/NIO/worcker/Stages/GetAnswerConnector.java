@@ -61,9 +61,6 @@ public class GetAnswerConnector implements IConnector {
     public void write() {
 
         writer.enableReadMode(false);
-
-
-
         if (counter == 1){
 
             messageList = messageService.getByQuestion(messageId);

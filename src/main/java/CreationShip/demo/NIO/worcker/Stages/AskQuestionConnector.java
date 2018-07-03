@@ -5,8 +5,12 @@ import CreationShip.demo.NIO.comunic.Writer;
 import CreationShip.demo.models.Question;
 import CreationShip.demo.service.MessageService;
 import CreationShip.demo.service.QuestionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AskQuestionConnector implements IConnector {
+
+    private static final Logger logger = LoggerFactory.getLogger(AskQuestionConnector.class);
 
     private Reader reader;
     private Writer writer;
@@ -25,9 +29,8 @@ public class AskQuestionConnector implements IConnector {
         if(counter > 1){
             counter = 0;
             return true;
-        }else {
-            return false;
         }
+        return false;
     }
 
     @Override
@@ -42,8 +45,6 @@ public class AskQuestionConnector implements IConnector {
 
     public void setReader(Reader reader) {
         this.reader = reader;
-
-
     }
 
     public void setWriter(Writer writer) {
@@ -52,19 +53,15 @@ public class AskQuestionConnector implements IConnector {
 
     @Override
     public String read() {
-
-        System.out.println("read question");
-
         question = new Question(reader.read());
         question = questionService.saveOrUpdate(question);
-
-        return question.getQuestion();//reader.read();
+        return question.getQuestion();
     }
 
     @Override
     public void write() {
         counter++;
-        System.out.println("ask question");
+        logger.info("ask question");
         writer.write("Ask question, please");
 
 
