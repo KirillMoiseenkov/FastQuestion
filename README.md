@@ -16,3 +16,5 @@ Run class - Client;
   you has to add message with question id equals 1;
 
 #2: run new client and answer the question there 
+
+#To select a stage: enter [number] n:s , where number - number of your stage , n:s - just a command
