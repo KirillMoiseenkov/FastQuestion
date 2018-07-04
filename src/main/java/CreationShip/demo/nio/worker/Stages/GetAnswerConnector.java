@@ -1,7 +1,7 @@
-package CreationShip.demo.NIO.worker.Stages;
+package CreationShip.demo.nio.worker.Stages;
 
-import CreationShip.demo.NIO.comunic.Reader;
-import CreationShip.demo.NIO.comunic.Writer;
+import CreationShip.demo.nio.interaction.Reader;
+import CreationShip.demo.nio.interaction.Writer;
 import CreationShip.demo.models.Message;
 import CreationShip.demo.models.Question;
 import CreationShip.demo.service.MessageService;
@@ -72,8 +72,6 @@ public class GetAnswerConnector implements IConnector {
 
     @Override
     public void write() {
-        writer.write("bo");
-
         if (counter == 1){
 
             messageList = messageService.getByQuestion(messageId);

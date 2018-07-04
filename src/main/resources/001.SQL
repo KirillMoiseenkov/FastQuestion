@@ -1,0 +1,15 @@
+CREATE TABLE `messages` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+`question_id` INT(11)NOT NULL,
+`message` VARCHAR(256)NOT NULL,
+PRIMARY KEY(`id`),
+KEY `question_id_idx`(`question_id`),
+CONSTRAINT `questions` FOREIGN KEY(`question_id`)REFERENCES `questions`(`id`)ON DELETE CASCADE ON UPDATE CASCADE )
+ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
+
+CREATE TABLE `questions` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+`question` VARCHAR(256)NOT NULL,
+PRIMARY KEY(`id`)
+)ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
+

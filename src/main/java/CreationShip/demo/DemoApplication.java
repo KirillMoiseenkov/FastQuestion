@@ -1,6 +1,6 @@
 package CreationShip.demo;
 
-import CreationShip.demo.NIO.Handler;
+import CreationShip.demo.nio.Handler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

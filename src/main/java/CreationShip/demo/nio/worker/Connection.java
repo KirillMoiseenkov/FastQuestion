@@ -1,18 +1,17 @@
-package CreationShip.demo.NIO.worker;
+package CreationShip.demo.nio.worker;
 
-import CreationShip.demo.NIO.comunic.Reader;
-import CreationShip.demo.NIO.comunic.Writer;
-import CreationShip.demo.NIO.worker.Stages.AnswerQuestionConnector;
-import CreationShip.demo.NIO.worker.Stages.AskQuestionConnector;
-import CreationShip.demo.NIO.worker.Stages.GetAnswerConnector;
-import CreationShip.demo.NIO.worker.Stages.IConnector;
+import CreationShip.demo.nio.interaction.Reader;
+import CreationShip.demo.nio.interaction.Writer;
+import CreationShip.demo.nio.worker.Stages.AnswerQuestionConnector;
+import CreationShip.demo.nio.worker.Stages.AskQuestionConnector;
+import CreationShip.demo.nio.worker.Stages.GetAnswerConnector;
+import CreationShip.demo.nio.worker.Stages.IConnector;
 import CreationShip.demo.models.Question;
 import CreationShip.demo.service.MessageService;
 import CreationShip.demo.service.QuestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.*;
 import java.util.HashMap;
 
 public class Connection implements IConnection{
@@ -91,13 +90,20 @@ public class Connection implements IConnection{
     @Override
     public void write() {
 
+        transferQuestion();
+
+        iConnector.write();
+    }
+
+    private void transferQuestion() {
+
         if(iConnector.getStateStage()) {
             Question question = new Question();
             question = iConnector.getQuestion();
             upStage();
             iConnector.setQuestion(question);
         }
-        iConnector.write();
+
     }
 
     @Override
@@ -105,12 +111,13 @@ public class Connection implements IConnection{
 
         String response = iConnector.read();
 
+
         if (response.contains("n:s")) {
-            int stage = Integer.valueOf(String.valueOf(response.charAt(0)));
-            logger.info("new stage is: " + stage);
+            int newStage = Integer.valueOf(String.valueOf(response.charAt(0)));
+            logger.info("new stage is: " + newStage);
+            transferQuestion();
             selectStage(stage);
         }
-
 
         return response;
     }

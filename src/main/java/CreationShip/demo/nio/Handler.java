@@ -1,4 +1,4 @@
-package CreationShip.demo.NIO;
+package CreationShip.demo.nio;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

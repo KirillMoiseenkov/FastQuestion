@@ -1,4 +1,4 @@
-package CreationShip.demo.NIO.comunic;
+package CreationShip.demo.nio.interaction;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

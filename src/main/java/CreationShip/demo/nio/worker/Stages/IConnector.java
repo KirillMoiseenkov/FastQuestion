@@ -1,7 +1,7 @@
-package CreationShip.demo.NIO.worker.Stages;
+package CreationShip.demo.nio.worker.Stages;
 
-import CreationShip.demo.NIO.comunic.Reader;
-import CreationShip.demo.NIO.comunic.Writer;
+import CreationShip.demo.nio.interaction.Reader;
+import CreationShip.demo.nio.interaction.Writer;
 import CreationShip.demo.models.Question;
 
 public interface IConnector {

@@ -1,8 +1,8 @@
-package CreationShip.demo.NIO;
+package CreationShip.demo.nio;
 
-import CreationShip.demo.NIO.comunic.Reader;
-import CreationShip.demo.NIO.comunic.Writer;
-import CreationShip.demo.NIO.worker.Connection;
+import CreationShip.demo.nio.interaction.Reader;
+import CreationShip.demo.nio.interaction.Writer;
+import CreationShip.demo.nio.worker.Connection;
 import CreationShip.demo.service.MessageService;
 import CreationShip.demo.service.QuestionService;
 import org.slf4j.Logger;

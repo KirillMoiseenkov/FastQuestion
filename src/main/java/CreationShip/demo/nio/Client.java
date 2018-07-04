@@ -1,4 +1,4 @@
-package CreationShip.demo.NIO;
+package CreationShip.demo.nio;
 
 import java.io.BufferedReader;
 import java.io.IOException;
