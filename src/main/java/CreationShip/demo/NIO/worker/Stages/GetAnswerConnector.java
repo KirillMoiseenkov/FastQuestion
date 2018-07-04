@@ -1,4 +1,4 @@
-package CreationShip.demo.NIO.worcker.Stages;
+package CreationShip.demo.NIO.worker.Stages;
 
 import CreationShip.demo.NIO.comunic.Reader;
 import CreationShip.demo.NIO.comunic.Writer;
@@ -6,10 +6,14 @@ import CreationShip.demo.models.Message;
 import CreationShip.demo.models.Question;
 import CreationShip.demo.service.MessageService;
 import CreationShip.demo.service.QuestionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class GetAnswerConnector implements IConnector {
+
+    private static final Logger logger = LoggerFactory.getLogger(GetAnswerConnector.class);
 
     private Reader reader;
     private Writer writer;
@@ -28,7 +32,16 @@ public class GetAnswerConnector implements IConnector {
 
     @Override
     public boolean getStateStage() {
-       return false;
+        if (counter == 3) {
+            counter = 1;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void setCounterDefoultValue() {
+        counter = 1;
     }
 
     public void setReader(Reader reader) {
@@ -51,16 +64,16 @@ public class GetAnswerConnector implements IConnector {
 
     @Override
     public String read() {
+        logger.info("message is = " + reader.read());
 
-        reader.enableWriteMode(false);
-        return "Empty";
+        return reader.getResponce();
 
     }
 
     @Override
     public void write() {
+        writer.write("bo");
 
-        writer.enableReadMode(false);
         if (counter == 1){
 
             messageList = messageService.getByQuestion(messageId);
@@ -80,6 +93,8 @@ public class GetAnswerConnector implements IConnector {
                 messageList.forEach(message -> writer.write(message.getMessage()));
                 oldId = messageList.get(messageList.size() - 1).getId();
             }
+
+
     }
 
     @Override

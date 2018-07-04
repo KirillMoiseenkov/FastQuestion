@@ -1,4 +1,4 @@
-package CreationShip.demo.NIO.worcker.Stages;
+package CreationShip.demo.NIO.worker.Stages;
 
 import CreationShip.demo.NIO.comunic.Reader;
 import CreationShip.demo.NIO.comunic.Writer;
@@ -14,6 +14,8 @@ public interface IConnector {
 
     public void setWriter(Writer writer);
     public void setReader(Reader reader);
+
+    public void setCounterDefoultValue();
 
     public Reader getReader();
     public Writer getWriter();

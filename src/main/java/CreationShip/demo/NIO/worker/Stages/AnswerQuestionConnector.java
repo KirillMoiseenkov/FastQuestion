@@ -1,16 +1,17 @@
-package CreationShip.demo.NIO.worcker.Stages;
+package CreationShip.demo.NIO.worker.Stages;
 
 import CreationShip.demo.NIO.comunic.Reader;
 import CreationShip.demo.NIO.comunic.Writer;
+import CreationShip.demo.models.Message;
 import CreationShip.demo.models.Question;
 import CreationShip.demo.service.MessageService;
 import CreationShip.demo.service.QuestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AskQuestionConnector implements IConnector {
+public class AnswerQuestionConnector implements IConnector {
 
-    private static final Logger logger = LoggerFactory.getLogger(AskQuestionConnector.class);
+    private static final Logger logger = LoggerFactory.getLogger(AnswerQuestionConnector.class);
 
     private Reader reader;
     private Writer writer;
@@ -19,18 +20,9 @@ public class AskQuestionConnector implements IConnector {
     private Question question;
     private int counter = 1;
 
-    public AskQuestionConnector(MessageService messageService, QuestionService questionService){
+    public AnswerQuestionConnector(MessageService messageService, QuestionService questionService){
         this.messageService = messageService;
         this.questionService = questionService;
-    }
-
-    @Override
-    public boolean getStateStage() {
-        if(counter > 1){
-            counter = 0;
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -43,6 +35,21 @@ public class AskQuestionConnector implements IConnector {
         return writer;
     }
 
+    @Override
+    public boolean getStateStage() {
+        if(counter > 3){
+            counter = 1;
+            return true;
+        }
+            return false;
+
+    }
+
+    @Override
+    public void setCounterDefoultValue() {
+        counter = 1;
+    }
+
     public void setReader(Reader reader) {
         this.reader = reader;
     }
@@ -53,17 +60,25 @@ public class AskQuestionConnector implements IConnector {
 
     @Override
     public String read() {
-        question = new Question(reader.read());
-        question = questionService.saveOrUpdate(question);
-        return question.getQuestion();
+        String response = reader.read();
+        Message message = new Message(question,response);
+        messageService.saveOrUpdate(message);
+        return response;
     }
 
     @Override
     public void write() {
-        counter++;
-        logger.info("ask question");
-        writer.write("Ask question, please");
 
+        counter++;
+
+        question = questionService.getRandomQuestion(1).get(0);
+
+        while (question.getQuestion().length() < 4) {
+            question = questionService.getRandomQuestion(1).get(0);
+        }
+
+        writer.write(question.getQuestion() + System.lineSeparator());
+        logger.info("question is " + question.getQuestion());
 
     }
 
@@ -76,6 +91,5 @@ public class AskQuestionConnector implements IConnector {
     public void setQuestion(Question question) {
         this.question = question;
     }
-
 
 }

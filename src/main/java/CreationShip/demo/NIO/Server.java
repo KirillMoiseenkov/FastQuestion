@@ -1,9 +1,8 @@
 package CreationShip.demo.NIO;
 
-import CreationShip.demo.DemoApplication;
 import CreationShip.demo.NIO.comunic.Reader;
 import CreationShip.demo.NIO.comunic.Writer;
-import CreationShip.demo.NIO.worcker.Connection;
+import CreationShip.demo.NIO.worker.Connection;
 import CreationShip.demo.service.MessageService;
 import CreationShip.demo.service.QuestionService;
 import org.slf4j.Logger;
@@ -138,7 +137,6 @@ public class Server extends Thread {
         if (connection.getReader() == null) {
             Reader reader = null;
             reader = new Reader(buffer, key, selector);
-            reader.enableWriteMode(true);
             connection.setReader(reader);
         }
 
@@ -152,7 +150,6 @@ public class Server extends Thread {
 
         if (!connectionMap.containsKey(key)) {
             connectionMap.put(key, new Connection(messageService, questionService));
-
             connection = connectionMap.get(key);
         }
 
@@ -161,7 +158,6 @@ public class Server extends Thread {
         if (connection.getWriter() == null) {
             Writer writer = null;
             writer = new Writer(buffer, key, selector);
-            writer.enableReadMode(true);
             connection.setWriter(writer);
         }
 
