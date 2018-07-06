@@ -14,7 +14,7 @@ public class TestClient {
         try {
 
 
-            socket = new Socket("localhost", 8080);
+            socket = new Socket("192.168.1.86", 8080);
 
             PrintWriter out = null;
 

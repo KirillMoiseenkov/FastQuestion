@@ -111,10 +111,10 @@ public class Connection implements IConnection{
 
         String response = iConnector.read();
 
-
         if (response.contains("n:s")) {
-            int newStage = Integer.valueOf(String.valueOf(response.charAt(0)));
-            logger.info("new stage is: " + newStage);
+            int stage = Integer.valueOf(String.valueOf(response.charAt(0)));
+
+            logger.info("new stage is: " + stage);
             transferQuestion();
             selectStage(stage);
         }
