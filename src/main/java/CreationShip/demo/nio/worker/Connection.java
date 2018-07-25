@@ -98,7 +98,7 @@ public class Connection implements IConnection{
     private void transferQuestion() {
 
         if(iConnector.getStateStage()) {
-            Question question = new Question();
+            Question question;
             question = iConnector.getQuestion();
             upStage();
             iConnector.setQuestion(question);
@@ -116,7 +116,7 @@ public class Connection implements IConnection{
 
             logger.info("new stage is: " + stage);
             transferQuestion();
-            selectStage(newStage);
+            selectStage(stage);
         }
 
         return response;
