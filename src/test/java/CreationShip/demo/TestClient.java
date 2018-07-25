@@ -27,7 +27,7 @@ public class TestClient {
 
             //out.println("om");
 
-            for (int i = 0;i<4;i++) {
+            for (;;) {
                 System.out.println(br.readLine());
                 System.out.print("client: ");
                 String userInput = stdIn.readLine();
@@ -35,7 +35,8 @@ public class TestClient {
                     break;
                 }
 
-                out.println(userInput);
+
+                out.println(userInput.replaceAll(System.lineSeparator(),""));
 
             }
 

@@ -116,7 +116,7 @@ public class Connection implements IConnection{
             int newStage = Integer.valueOf(String.valueOf(response.charAt(0)));
             logger.info("new stage is: " + newStage);
             transferQuestion();
-            selectStage(stage);
+            selectStage(newStage);
         }
 
         return response;

@@ -23,17 +23,20 @@ public class GetAnswerConnector implements IConnector {
     private Long messageId;
     private Long oldId;
     private List<Message> messageList;
-    private int counter = 1;
+    private int counter;
 
     public GetAnswerConnector(MessageService messageService, QuestionService questionService){
         this.messageService = messageService;
         this.questionService = questionService;
+        this.counter = 1;
+
+        logger.info("initialize");
     }
 
     @Override
     public boolean getStateStage() {
         if (counter == 3) {
-            counter = 1;
+          //  counter = 1;
             return true;
         }
         return false;
@@ -41,7 +44,7 @@ public class GetAnswerConnector implements IConnector {
 
     @Override
     public void setCounterDefoultValue() {
-        counter = 1;
+        //counter = 1;
     }
 
     public void setReader(Reader reader) {
@@ -72,6 +75,10 @@ public class GetAnswerConnector implements IConnector {
 
     @Override
     public void write() {
+
+        System.out.println("pre counter = " + counter);
+
+
         if (counter == 1){
 
             messageList = messageService.getByQuestion(messageId);
@@ -79,17 +86,28 @@ public class GetAnswerConnector implements IConnector {
             if (messageList.size() == 0)
             return;
 
-            messageList.forEach(message -> writer.write(message.getMessage()));
+            messageList.forEach(message ->
+            {
+                    writer.write(message.getMessage());
+                    System.out.println("face messageList.size() = " + messageList.size());
+
+            });
             oldId = messageList.get(messageList.size() - 1).getId();
 
             counter++;
         }
 
+        System.out.println("counter = " + counter);
+
             messageList = messageService.getByQuestion(messageId, oldId);
 
             if (messageList.size() > 0) {
+
                 messageList.forEach(message -> writer.write(message.getMessage()));
                 oldId = messageList.get(messageList.size() - 1).getId();
+
+                System.out.println("inner messageList.size() = " + messageList.size());
+                //logger.info("messageList.size() = " + String.valueOf(messageList.size()));
             }
 
 

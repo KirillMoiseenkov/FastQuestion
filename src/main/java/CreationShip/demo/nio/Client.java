@@ -16,8 +16,10 @@ public class Client {
     private static ByteBuffer buffer;
     private static Client instance;
     private static CharsetEncoder encoder = Charset.forName("US-ASCII").newEncoder();
+    private final String adress = "192.168.1.80";
+    // private InetSocketAddress inetSocketAddress = new InetSocketAddress("192.168.1.80",8080);
 
-    private Client() {
+    public Client() {
         try {
             client = SocketChannel.open(new InetSocketAddress("localhost", 8080));
             buffer = ByteBuffer.allocate(64);
@@ -37,15 +39,31 @@ public class Client {
         buffer.flip();
         buffer.clear();
 
-        String msg = stdIn.readLine();
+        String msg = stdIn.readLine().replaceAll(System.lineSeparator(), "");
         client.write(ByteBuffer.wrap(msg.getBytes()));
-        }
+    }
+
+    public void sendGetMessage(String pattern) throws IOException {
+
+        client.read(buffer);
+
+        String response = new String(Arrays.copyOfRange(buffer.array(), 0, buffer.position()));
+
+        System.out.println("response from send: " + response.replace(System.lineSeparator(), ""));
+
+        buffer.flip();
+        buffer.clear();
+
+        String msg = pattern;
+        System.out.println(pattern);
+        client.write(ByteBuffer.wrap(msg.getBytes()));
+    }
 
     public static void getMessages() throws IOException {
 
         client.read(buffer);
 
-        String responce = new String(Arrays.copyOfRange(buffer.array(),0, buffer.position()));
+        String responce = new String(Arrays.copyOfRange(buffer.array(), 0, buffer.position()));
 
         System.out.println("response from get: " + responce.replace(System.lineSeparator(), ""));
 
@@ -55,16 +73,6 @@ public class Client {
     }
 
 
-    public static String bb_to_str(ByteBuffer buffer){
-        byte[] bytes;
-        if(buffer.hasArray()) {
-            bytes = buffer.array();
-        } else {
-            bytes = new byte[buffer.remaining()];
-            buffer.get(bytes);
-        }
-        return new String(bytes);
-    }
 
     public static void main(String[] args) throws IOException {
 
@@ -72,18 +80,12 @@ public class Client {
 
         BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 
-        for (int i = 0; i < 15; i++) {
-            echoClient.sendGetMessage(stdIn);
+        for (int i = 0; i< 10;i++) {
+            echoClient.sendGetMessage("1n:s Kirill " + i);
         }
 
-        client.write(ByteBuffer.wrap("".getBytes()));
-        client.write(ByteBuffer.wrap("".getBytes()));
 
-
-        while (true){
-            echoClient.getMessages();
-        }
+        System.out.println("END");
 
     }
-
 }

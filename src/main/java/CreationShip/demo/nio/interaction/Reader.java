@@ -49,6 +49,8 @@ public class Reader {
 
             responce = new String(Arrays.copyOfRange(buffer.array(),0, buffer.position()));
 
+
+
             if (mode) client.register(selector, SelectionKey.OP_WRITE);
             else client.register(selector, SelectionKey.OP_READ);
 
